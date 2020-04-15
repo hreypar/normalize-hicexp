@@ -8,5 +8,5 @@ find -L data/ \
 	-name "*.hicexp.Rds" \
 | sed -r \
 	-e 's#^data/#results/#' \
-	-e 's#.hicexp.Rds$#.normalized.hicexp.Rds#'
+	-e 's#.hicexp.Rds$#.cycnorm.hicexp.Rds#'
 

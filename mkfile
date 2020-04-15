@@ -11,7 +11,7 @@
 #
 # Run R script to normalize matrices using cyclic loess.
 #
-results/%.normalized.hicexp.Rds:	data/%.hicexp.Rds
+results/%.cycnorm.hicexp.Rds:	data/%.hicexp.Rds
 	mkdir -p `dirname $target`
 	bin/normalize-hicexp-cycloess.R \
 		--vanilla \
