@@ -1,7 +1,7 @@
 #!/usr/bin/env Rscript
 #
 # hreyes April 2020
-# normalize-hicexp.R
+# normalize-hicexp-cycloess.R
 #
 # Read in a hicexp object and apply cyclic loess normalization to it
 #
@@ -10,21 +10,22 @@
 library(multiHiCcompare)
 library(magrittr)
 library(BiocParallel)
-
 #
 options(scipen = 10)
+#
+cores = parallel::detectCores()
+register(MulticoreParam(workers = cores - 2), default = TRUE)
 #
 ########################## read in data ###################################
 args = commandArgs(trailingOnly=TRUE)
 #
-#args = c("data/breast-cancer-1mb/breast-cancer-1mb.hicexp.Rds", "results/breast-cancer-1mb/breast-cancer-1mb.cycnorm.hicexp.Rds")
 args[!grepl(".cycnorm", args)]  %>% 
-  readRDS() -> input.hicexp
+  readRDS() -> my.hicexp
 #
 outcycnorm.path = args[grepl("cycnorm", args)]
 #
 ########################## call cyclic loess ##############################
-outcycnorm <- cyclic_loess(hicexp = input.hicexp, parallel = TRUE)
+my.hicexp <- cyclic_loess(hicexp = my.hicexp, parallel = TRUE)
 #
 ################ save normalized hicexp ################
-saveRDS(outcycnorm, file = outcycnorm.path)
+saveRDS(my.hicexp, file = outcycnorm.path)
