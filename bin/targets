@@ -1,0 +1,12 @@
+#!/bin/bash
+#
+# USAGE:
+# bin/targets
+
+find -L data/ \
+	-type f \
+	-name "*.hicexp.Rds" \
+| sed -r \
+	-e 's#^data/#results/#' \
+	-e 's#.hicexp.Rds$#.normalized.hicexp.Rds#'
+
