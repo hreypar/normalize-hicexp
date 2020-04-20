@@ -14,7 +14,6 @@
 results/%.cycnorm.hicexp.Rds:	data/%.hicexp.Rds
 	mkdir -p `dirname $target`
 	bin/normalize-hicexp-cycloess.R \
-		--vanilla \
-		$prereq \
-		$target
+		--input $prereq \
+		--output $target
 

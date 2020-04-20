@@ -7,6 +7,7 @@
 #
 #
 #################### import libraries and set options ####################
+library(optparse)
 library(multiHiCcompare)
 library(magrittr)
 library(BiocParallel)
@@ -17,15 +18,26 @@ cores = parallel::detectCores()
 register(MulticoreParam(workers = cores - 2), default = TRUE)
 #
 ########################## read in data ###################################
-args = commandArgs(trailingOnly=TRUE)
-#
-args[!grepl(".cycnorm", args)]  %>% 
-  readRDS() -> my.hicexp
-#
-outcycnorm.path = args[grepl("cycnorm", args)]
+option_list = list(
+  make_option(opt_str = c("-i", "--input"), 
+              type = "character",
+              help = "Input hicexp object as an Rds file"),
+  make_option(opt_str = c("-o", "--output"), 
+              type = "character", 
+              help = "output filepath for the normalised hicexp object")
+)
+
+opt <- parse_args(OptionParser(option_list=option_list))
+
+if (is.null(opt$input)){
+  print_help(OptionParser(option_list=option_list))
+  stop("The hicexp input file is mandatory.n", call.=FALSE)
+}
+
+the.hicexp <- readRDS(file = opt$input)
 #
 ########################## call cyclic loess ##############################
-my.hicexp <- cyclic_loess(hicexp = my.hicexp, parallel = TRUE)
+the.hicexp <- cyclic_loess(hicexp = the.hicexp, parallel = TRUE)
 #
 ################ save normalized hicexp ################
-saveRDS(my.hicexp, file = outcycnorm.path)
+saveRDS(the.hicexp, file = opt$output)
