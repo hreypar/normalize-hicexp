@@ -7,14 +7,16 @@
 #
 #
 #################### import libraries and set options ####################
-library(optparse)
+suppressMessages(library(optparse))
 suppressMessages(library(multiHiCcompare))
-library(magrittr)
-library(BiocParallel)
+suppressMessages(library(magrittr))
+suppressMessages(library(BiocParallel))
+message("\nRequired libraries have been loaded.")
 #
 options(scipen = 10)
 #
 cores = parallel::detectCores()
+message(paste(cores, "cores have been detected. Using" cores-2))
 register(MulticoreParam(workers = cores - 2), default = TRUE)
 #
 ########################## read in data ###################################
@@ -35,9 +37,13 @@ if (is.null(opt$input)){
 }
 
 the.hicexp <- readRDS(file = opt$input)
+message("The input hicexp has been loaded.")
 #
 ########################## call cyclic loess ##############################
 the.hicexp <- cyclic_loess(hicexp = the.hicexp, parallel = TRUE)
+message("The hicexp has been normalised.")
 #
 ################ save normalized hicexp ################
 saveRDS(the.hicexp, file = opt$output)
+message("The normalised hicexp has been saved as an Rds file.\n")
+
