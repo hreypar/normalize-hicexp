@@ -16,7 +16,7 @@ message("\nRequired libraries have been loaded.")
 options(scipen = 10)
 #
 cores = parallel::detectCores()
-message(paste(cores, "cores have been detected. Using" cores-2))
+message(paste(cores, "cores have been detected. Using", cores-2))
 register(MulticoreParam(workers = cores - 2), default = TRUE)
 #
 ########################## read in data ###################################
